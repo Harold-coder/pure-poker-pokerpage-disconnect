@@ -28,7 +28,9 @@ exports.handler = async (event) => {
             await lambda.invoke({
                 FunctionName: 'poker-game-leaveGame',
                 InvocationType: 'Event',
-                Payload: JSON.stringify(leaveGamePayload),
+                Payload: JSON.stringify({
+                    body: JSON.stringify(leaveGamePayload) // Mimic HTTP request body
+                }),
             }).promise();
         }
         // Attempt to delete the connection
