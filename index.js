@@ -1,39 +1,11 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.CONNECTIONS_TABLE;
-const lambda = new AWS.Lambda();
 
 exports.handler = async (event) => {
     const connectionId = event.requestContext.connectionId;
 
     try {
-
-        const connectionData = await dynamoDb.get({
-            TableName: tableName,
-            Key: { connectionId },
-        }).promise();
-
-        const playerData = connectionData.Item;
-        if (!playerData) {
-            console.log("No player found for connection ${connectionId}");
-            return {statusCode: 404, body: "Player not found"};
-        }
-        const game = playerData.gameId;
-        if (game) {
-            const leaveGamePayload = {
-                gameId: game, 
-                playerId: playerData.playerId,
-                connectionId: connectionId
-            };
-
-            await lambda.invoke({
-                FunctionName: 'poker-game-leaveGame',
-                InvocationType: 'Event',
-                Payload: JSON.stringify({
-                    body: JSON.stringify(leaveGamePayload) // Mimic HTTP request body
-                }),
-            }).promise();
-        }
         // Attempt to delete the connection
         const deleteResult = await dynamoDb.delete({
             TableName: tableName,
