@@ -23,6 +23,7 @@ exports.handler = async (event) => {
             const leaveGamePayload = {
                 gameId: game, 
                 playerId: playerData.playerId,
+                connectionId: connectionId
             };
 
             await lambda.invoke({
