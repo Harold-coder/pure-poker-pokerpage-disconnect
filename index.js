@@ -18,10 +18,10 @@ exports.handler = async (event) => {
             console.log("No player found for connection ${connectionId}");
             return {statusCode: 404, body: "Player not found"};
         }
-        const gameId = playerData.userId;
-        if (gameId) {
+        const game = playerData.gameId;
+        if (game) {
             const leaveGamePayload = {
-                gameId: playerData.gameId, 
+                gameId: game, 
                 playerId: playerData.userId,
             };
 
