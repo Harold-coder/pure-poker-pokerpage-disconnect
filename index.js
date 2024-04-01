@@ -26,7 +26,7 @@ exports.handler = async (event) => {
             };
 
             await lambda.invoke({
-                FunctionName: 'leaveGame',
+                FunctionName: 'poker-game-leaveGame',
                 InvocationType: 'Event',
                 Payload: JSON.stringify(leaveGamePayload),
             }).promise();
