@@ -6,6 +6,29 @@ exports.handler = async (event) => {
     const connectionId = event.requestContext.connectionId;
 
     try {
+
+        const connectionData = await dynamoDb.get({
+            TableName: tableName,
+            Key: { connectionId },
+        }).promise();
+
+        const playerData = connectionData.Item;
+        if (!playerData) {
+            console.log("No player found for connection ${connectionId}");
+            return {statusCode: 404, body: "Player not found"};
+        }
+
+        const leaveGamePayload = {
+            gameId: playerData.gameId, 
+            playerId: playerData.userId,
+        };
+
+        await lambda.invoke({
+            FunctionName: 'leaveGame',
+            InvocationType: 'Event',
+            Payload: JSON.stringify(leaveGamePayload),
+        }).promise();
+
         // Attempt to delete the connection
         const deleteResult = await dynamoDb.delete({
             TableName: tableName,
