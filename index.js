@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.CONNECTIONS_TABLE;
+const lambda = new AWS.Lambda();
 
 exports.handler = async (event) => {
     const connectionId = event.requestContext.connectionId;
